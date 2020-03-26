@@ -142,9 +142,9 @@ while True:
 	# montages = build_montages(frameDict.values(), (w, h), (mW, mH))
 
 	# display the montage(s) on the screen
-	for (i, montage) in enumerate(montages):
-		cv2.imshow("Home pet location monitor ({})".format(i),
-			montage)
+	# for (i, montage) in enumerate(montages):
+	print("Frame received")
+	print(frame)
 
 	# detect any kepresses
 	key = cv2.waitKey(1) & 0xFF
@@ -159,7 +159,7 @@ while True:
 			if (datetime.now() - ts).seconds > ACTIVE_CHECK_SECONDS:
 				print("[INFO] lost connection to {}".format(rpiName))
 				lastActive.pop(rpiName)
-				frameDict.pop(rpiName)
+				# frameDict.pop(rpiName)
 
 		# set the last active check time as current time
 		lastActiveCheck = datetime.now()
