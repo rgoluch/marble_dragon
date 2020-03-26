@@ -12,6 +12,7 @@ import time
 ap = argparse.ArgumentParser()
 ap.add_argument("-s", "--server-ip", required=True,
 	help="ip address of the server to which the client will connect")
+ap.add_argument("-c", "--camera-ip", required=True, help="ip address of the camera on the local network to get a feed from")
 args = vars(ap.parse_args())
 
 # initialize the ImageSender object with the socket address of the
@@ -22,7 +23,7 @@ sender = imagezmq.ImageSender(connect_to="tcp://{}:5555".format(
 # get the host name, initialize the video stream, and allow the
 # camera sensor to warmup
 rpiName = socket.gethostname()
-vs = VideoStream(src="http://192.168.1.122/video.mjpg").start()
+vs = VideoStream(src="http://"+str(args["camera_ip"])+"/video.mjpg").start()
 time.sleep(2.0)
  
 while True:
