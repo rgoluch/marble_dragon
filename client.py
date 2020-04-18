@@ -8,6 +8,7 @@ import argparse
 import socket
 import time
 import cv2
+import requests as r
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -22,17 +23,22 @@ args = vars(ap.parse_args())
 sender = imagezmq.ImageSender(connect_to="tcp://{}:5555".format(
 	args["server_ip"]))
 
-# get the host name, initialize the video stream, and allow the
-# camera sensor to warmup
-rpiName = args["camera_ip"]
-feed = cv2.VideoCapture("http://" + str(args["camera_ip"]) + "/video.mjpg")
-# ret, img = feed.read()
-# vs = VideoStream(src="http://"+str(args["camera_ip"])+"/video.mjpg").start()
-time.sleep(2.0)
-i = 0
+cameras = r.get("http://3.14.117.253:5000/camera")
+camera_ip = []
+camera_name = []
+
+for c in cameras.json():
+	camera_ip.append(c['ip'])
+	camera_name.append(c['nickname'])
+
 while True:
 	# read the frame from the camera and send it to the server
-	ret, frame = feed.read()
-	print(i)
-	i+=1
-	sender.send_image(rpiName, frame)
+	for i,j in zip(camera_ip, camera_name):
+		rpiName = j
+		feed = cv2.VideoCapture("http://" + str(i) + "/video.mjpg")
+		if len(feed) > 0:
+			time.sleep(2.0)
+			ret, frame = feed.read()
+			print(i)
+			i+=1
+			sender.send_image(rpiName, frame)
