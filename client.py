@@ -24,7 +24,7 @@ sender = imagezmq.ImageSender(connect_to="tcp://{}:5555".format(
 
 # get the host name, initialize the video stream, and allow the
 # camera sensor to warmup
-rpiName = socket.gethostname()
+rpiName = args["camera_ip"]
 feed = cv2.VideoCapture("http://" + str(args["camera_ip"]) + "/video.mjpg")
 # ret, img = feed.read()
 # vs = VideoStream(src="http://"+str(args["camera_ip"])+"/video.mjpg").start()
