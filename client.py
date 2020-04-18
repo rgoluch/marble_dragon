@@ -25,15 +25,14 @@ sender = imagezmq.ImageSender(connect_to="tcp://{}:5555".format(
 # get the host name, initialize the video stream, and allow the
 # camera sensor to warmup
 rpiName = args["camera_ip"]
-# feed = cv2.VideoCapture("http://" + str(args["camera_ip"]) + "/video.mjpg")
+feed = cv2.VideoCapture("http://" + str(args["camera_ip"]) + "/video.mjpg")
 # ret, img = feed.read()
 # vs = VideoStream(src="http://"+str(args["camera_ip"])+"/video.mjpg").start()
 time.sleep(2.0)
 i = 0
 while True:
 	# read the frame from the camera and send it to the server
-	# ret, frame = feed.read()
-	frame = args["camera_ip"]
+	ret, frame = feed.read()
 	print(i)
 	i+=1
 	sender.send_image(rpiName, frame)
