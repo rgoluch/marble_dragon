@@ -11,17 +11,17 @@ import cv2
 import requests as r
 
 # construct the argument parser and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-s", "--server-ip", required=True,
-	help="ip address of the server to which the client will connect")
-ap.add_argument("-c", "--camera-ip", required=True, help="ip address of the camera on the local network to get a feed from")
-args = vars(ap.parse_args())
+# ap = argparse.ArgumentParser()
+# ap.add_argument("-s", "--server-ip", required=True,
+# 	help="ip address of the server to which the client will connect")
+# ap.add_argument("-c", "--camera-ip", required=True, help="ip address of the camera on the local network to get a feed from")
+# args = vars(ap.parse_args())
 
 # initialize the ImageSender object with the socket address of the
 # server
-
+server_ip = "3.14.117.253"
 sender = imagezmq.ImageSender(connect_to="tcp://{}:5555".format(
-	args["server_ip"]))
+	server_ip))
 
 cameras = r.get("http://3.14.117.253:5000/camera")
 camera_ip = []
@@ -39,9 +39,9 @@ while True:
 			feed = cv2.VideoCapture("http://"+str(i)+":5000/video_feed")
 		else:
 			feed = cv2.VideoCapture("http://" + str(i) + "/video.mjpg")
-		if len(feed) > 0:
+		if feed is not None:
 			time.sleep(2.0)
 			ret, frame = feed.read()
 			print(i)
-			i+=1
+			# i+=1
 			sender.send_image(rpiName, frame)
