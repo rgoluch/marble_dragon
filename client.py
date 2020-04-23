@@ -35,7 +35,10 @@ while True:
 	# read the frame from the camera and send it to the server
 	for i,j in zip(camera_ip, camera_name):
 		rpiName = j
-		feed = cv2.VideoCapture("http://" + str(i) + "/video.mjpg")
+		if (i in "10.0.0.170"):
+			feed = cv2.VideoCapture("http://"+str(i)+":5000/video_feed")
+		else:
+			feed = cv2.VideoCapture("http://" + str(i) + "/video.mjpg")
 		if len(feed) > 0:
 			time.sleep(2.0)
 			ret, frame = feed.read()
